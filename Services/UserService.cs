@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace TimeManagementController.Services
             FirebaseClient firebaseClient = new FirebaseClient(_url);
             //firebaseClient.Child("Users1").DeleteAsync();
             firebaseClient.Child("Users").PostAsync(user);
-            Console.WriteLine("ready");
+            Trace.WriteLine("ready");
             return true;
         }
 

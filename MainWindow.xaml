@@ -5,14 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeManagementController"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="200" Width="300">
     <Grid>
         <StackPanel>
-            <TextBox Text="{Binding Username}"/>
-            <TextBox Text="{Binding Password}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Username"/>
+                <TextBox Text="{Binding Username}" Width="60" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Username"/>
+                <TextBox Text="{Binding Password}" Width="60"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="OpenFileDIalog" Click="OpenFileDIalog" Margin="5"/>
+                <Label Content="{Binding Url}"/>
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal" >
+                <Button Content="Login" Click="Login" Margin="5"/>
+                <Button Content="Register" Click="Register" Margin="5"/>
+            </StackPanel>
+            
             <Label Content="{Binding Id}"/>
-            <Button Content="OpenFileDIalog" Click="Button_Click"/>
-            <RichTextBox x:Name="dfdd"></RichTextBox>
+
+
+            <Label x:Name="dfdd"/>
+            <Label x:Name="fgd"/>
         </StackPanel>
     </Grid>
 </Window>

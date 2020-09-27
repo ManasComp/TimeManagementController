@@ -6,79 +6,96 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TimeManagementController.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace TimeManagementController.ViewModels
 {
     class LoginViewModel : BaseViewModel
     {
-        private bool Result;
-
         private string _id;
         public string Id
         {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                SetValue(ref _id, value);
-            }
+            get => _id;
+            set => SetValue(ref _id, value);
+
         }
+
+        private string _url;
+        public string Url
+        {
+            get => _url;
+            set => SetValue(ref _url, value);
+        }
+
         public string Username { get; set; }
         public string Password { get; set; }
+        UserService userService;
+        ExcelService xLSX;
 
-
-        public async Task Register(string Username1, string Password1)
+        public LoginViewModel()
         {
-            var userService = new UserService();
-            Result = await userService.RegisterUser(Username1, Password1);
-            if (Result)
-                Console.WriteLine("OK");
-            else
-                Console.WriteLine("exists");
+            userService = new UserService();
         }
-
-
-        public async Task<string> LogOrReg()
+        private async void Register()
         {
-            var userService = new UserService();
-            if (userService.IsUserExists(Username).Result)
+            if (!userService.IsUserExists(Username).Result)
             {
-                Console.WriteLine("User exists, try to login");
-            }
-            else
-            {
-                Console.WriteLine("User does NOT exists, try to register");
-                Register(Username, Password);
-                Console.WriteLine("try to login");
+                Trace.WriteLine("User does NOT exists, try to register");
+                var userService = new UserService();
+                await userService.RegisterUser(Username, Password);
+                Trace.WriteLine("try to login");
                 Thread.Sleep(8000);
             }
-            Id= Login(Username, Password).Result;
-            return Id;
+            else
+            {
+                Trace.WriteLine("User exists");
+            }
+            Id = Login().Result;
         }
 
-        public async Task<string> Login(string Username1, string Password1)
+        public async Task FileDialogClick()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Url = openFileDialog.FileName;
+            }
+            xLSX = new ExcelService(Url);
+        }
+
+        public async Task LoginButton()
+        {
+            await Login();
+            Thread.Sleep(5000);
+            await xLSX.AddData(Url);
+        }
+
+        public async Task RegisterButton()
+        {
+            Register();
+            Thread.Sleep(5000);
+            await xLSX.AddData(Url);
+        }
+
+        private async Task<string> Login()
         {
             var userService = new UserService();
-            Result = await userService.Login(Username1, Password1);
+            bool Result = await userService.Login(Username, Password);
             if (Result)
             {
-                Console.WriteLine("logged");
-                Console.WriteLine(userService.user.Id);
+                Trace.WriteLine("logged");
+                Trace.WriteLine(userService.user.Id);
                 return userService.user.Id;
 
             }
             else
             {
-                Console.WriteLine("error");
+                Trace.WriteLine("error");
                 return "";
             }
         }
