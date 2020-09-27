@@ -43,8 +43,8 @@ namespace TimeManagementController.Services
         {
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient _firebaseClient = new FirebaseClient(_url);
-            var mrdka = await _firebaseClient.Child("Users").OnceAsync<User>();
-            user = mrdka.Select(e => e.Object as User).ToList()
+            var mrdka = _firebaseClient.Child("Users").OnceAsync<User>();
+            user = mrdka.Result.Select(e => e.Object as User).ToList()
                 .Where(u => u.Username == uname)
                 .FirstOrDefault(u => u.Password == passwd);
             return (user != null);

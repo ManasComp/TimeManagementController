@@ -8,10 +8,10 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <TextBox Text="Pass"/>
-            <TextBox Text="Label"/>
-            <Label x:Name="Label"/>
-            <Button Content="OpenFileDIalog"/>
+            <TextBox Text="{Binding Username}"/>
+            <TextBox Text="{Binding Password}"/>
+            <Label Content="{Binding Id}"/>
+            <Button Content="OpenFileDIalog" Click="Button_Click"/>
             <RichTextBox x:Name="dfdd"></RichTextBox>
         </StackPanel>
     </Grid>
