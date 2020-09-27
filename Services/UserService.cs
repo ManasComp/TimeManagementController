@@ -25,7 +25,7 @@ namespace TimeManagementController.Services
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient firebaseClient = new FirebaseClient(_url);
             //firebaseClient.Child("Users1").DeleteAsync();
-            firebaseClient.Child("Users").PostAsync(user);
+            await firebaseClient.Child("Users").PostAsync(user);
             Trace.WriteLine("ready");
             return true;
         }

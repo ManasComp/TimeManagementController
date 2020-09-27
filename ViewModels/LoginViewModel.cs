@@ -38,7 +38,7 @@ namespace TimeManagementController.ViewModels
         {
             userService = new UserService();
         }
-        private async void Register()
+        private async Task Register()
         {
             if (!userService.IsUserExists(Username).Result)
             {
@@ -46,13 +46,13 @@ namespace TimeManagementController.ViewModels
                 var userService = new UserService();
                 await userService.RegisterUser(Username, Password);
                 Trace.WriteLine("try to login");
-                Thread.Sleep(8000);
+                //Thread.Sleep(8000);
             }
             else
             {
                 Trace.WriteLine("User exists");
             }
-            Id = Login().Result;
+            await Login();
         }
 
         public async Task FileDialogClick()
@@ -65,21 +65,20 @@ namespace TimeManagementController.ViewModels
             {
                 Url = openFileDialog.FileName;
             }
-            xLSX = new ExcelService(Url);
         }
 
         public async Task LoginButton()
         {
             await Login();
-            Thread.Sleep(5000);
-            await xLSX.AddData(Url);
+            xLSX = new ExcelService(Id, Url);
+            await xLSX.AddData();
         }
 
         public async Task RegisterButton()
         {
-            Register();
-            Thread.Sleep(5000);
-            await xLSX.AddData(Url);
+            await Register();
+            xLSX = new ExcelService(Id, Url);
+            await xLSX.AddData();
         }
 
         private async Task<string> Login()
@@ -90,6 +89,7 @@ namespace TimeManagementController.ViewModels
             {
                 Trace.WriteLine("logged");
                 Trace.WriteLine(userService.user.Id);
+                Id = userService.user.Id;
                 return userService.user.Id;
 
             }
@@ -98,6 +98,7 @@ namespace TimeManagementController.ViewModels
                 Trace.WriteLine("error");
                 return "";
             }
+
         }
     }
 }

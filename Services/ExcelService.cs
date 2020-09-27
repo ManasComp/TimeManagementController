@@ -23,9 +23,11 @@ namespace TimeManagementController.Services
         //FirebaseService fireBaseService;
 
         private string Id;
-        public ExcelService(string id)
+        private string Url;
+        public ExcelService(string id, string url)
         {
-            url = id;
+            Url = url;
+            Id = id;
         }
         private void CellParse(int x, int y, int activityId)
         {
@@ -53,12 +55,12 @@ namespace TimeManagementController.Services
         }
 
         //@"C:\Users\l20170133\Desktop\TimeTable.xlsx"
-        private string url;
+
         private void Settings()
         {
             Trace.WriteLine("Settings");
             xlApp = new Excel.Application();
-            xlWorkbook = xlApp.Workbooks.Open(url);
+            xlWorkbook = xlApp.Workbooks.Open(Url);
             xlWorksheet = xlWorkbook.Sheets[1];
             xlRange = xlWorksheet.UsedRange;
             activities = new List<DayProgram>();
@@ -96,9 +98,8 @@ namespace TimeManagementController.Services
             Cleaning();
         }
 
-        public async Task AddData(string adress)
+        public async Task AddData()
         {
-            adress = url;
             Trace.WriteLine("AddData");
             Loading();
             //fireBaseService = new FirebaseService();
@@ -106,9 +107,9 @@ namespace TimeManagementController.Services
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient firebaseClient = new FirebaseClient(_url);
             //firebaseClient.Child(Id).DeleteAsync();
-            firebaseClient.Child(Id).DeleteAsync();
-            firebaseClient.Child(Id).PostAsync(activities);
-            Thread.Sleep(10000);
+            await firebaseClient.Child(Id).DeleteAsync();
+            await firebaseClient.Child(Id).PostAsync(activities);
+            //Thread.Sleep(10000);
             Trace.WriteLine("**************************************************************************************************End");
         }
     }
