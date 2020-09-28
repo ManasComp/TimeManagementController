@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using TimeManagementController.Models;
 using Excel = Microsoft.Office.Interop.Excel;
-using Firebase.Database;
-using Firebase.Database.Query;
-using System.Threading;
-using System.Diagnostics;
 
 namespace TimeManagementController.Services
 {
@@ -20,7 +15,7 @@ namespace TimeManagementController.Services
         Excel._Worksheet xlWorksheet;
         Excel.Range xlRange;
         List<DayProgram> activities;
-        //FirebaseService fireBaseService;
+        FirebaseService firebaseService;
 
         private string Id;
         private string Url;
@@ -28,6 +23,7 @@ namespace TimeManagementController.Services
         {
             Url = url;
             Id = id;
+            firebaseService = new FirebaseService();
         }
         private void CellParse(int x, int y, int activityId)
         {
@@ -53,8 +49,6 @@ namespace TimeManagementController.Services
                 CellParse(i, 1 + j * 6, j);
             }
         }
-
-        //@"C:\Users\l20170133\Desktop\TimeTable.xlsx"
 
         private void Settings()
         {
@@ -102,14 +96,14 @@ namespace TimeManagementController.Services
         {
             Trace.WriteLine("AddData");
             Loading();
-            //fireBaseService = new FirebaseService();
 
-            string _url = "https://timemanegment-74160.firebaseio.com/";
-            FirebaseClient firebaseClient = new FirebaseClient(_url);
-            //firebaseClient.Child(Id).DeleteAsync();
-            await firebaseClient.Child(Id).DeleteAsync();
-            await firebaseClient.Child(Id).PostAsync(activities);
-            //Thread.Sleep(10000);
+            //string _url = "https://timemanegment-74160.firebaseio.com/";
+
+            await firebaseService.DeleteAsync(Id);
+            await firebaseService.PostAsync(Id, activities);
+            //FirebaseClient firebaseClient = new FirebaseClient(_url);
+            //await firebaseClient.Child(Id).DeleteAsync();
+            //await firebaseClient.Child(Id).PostAsync(activities);
             Trace.WriteLine("**************************************************************************************************End");
         }
     }

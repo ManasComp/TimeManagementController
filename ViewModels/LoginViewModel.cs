@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using TimeManagementController.Services;
-using System.Windows.Input;
-using Microsoft.Win32;
-using System.Diagnostics;
 
 namespace TimeManagementController.ViewModels
 {

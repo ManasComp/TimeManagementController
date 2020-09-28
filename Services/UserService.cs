@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Firebase.Database;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Firebase.Database;
-using Firebase.Database.Query;
 using TimeManagementController.Models;
 
 namespace TimeManagementController.Services
 {
     class UserService
     {
-        //private FirebaseService _firebaseService;
+        FirebaseService firebaseService;
+        public UserService()
+        {
+            firebaseService = new FirebaseService();
+        }
+    
         public User user;
         public async Task<bool> RegisterUser(string uname, string passwd)
         {
@@ -22,10 +24,10 @@ namespace TimeManagementController.Services
                 Username = uname,
                 Password = passwd
             };
-            string _url = "https://timemanegment-74160.firebaseio.com/";
-            FirebaseClient firebaseClient = new FirebaseClient(_url);
-            //firebaseClient.Child("Users1").DeleteAsync();
-            await firebaseClient.Child("Users").PostAsync(user);
+            //string _url = "https://timemanegment-74160.firebaseio.com/";
+            //FirebaseClient firebaseClient = new FirebaseClient(_url);
+            //await firebaseClient.Child("Users").PostAsync(user);
+            await firebaseService.PostAsync("Users", user);
             Trace.WriteLine("ready");
             return true;
         }
@@ -34,8 +36,10 @@ namespace TimeManagementController.Services
         {
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient firebaseClient = new FirebaseClient(_url);
-            User user = firebaseClient.Child("Users").OnceAsync<User>().Result.Select(e => e.Object as User)
-                .FirstOrDefault(u => u.Username == uname);
+            User user = firebaseClient.Child("Users").OnceAsync<User>().Result.Select(e => e.Object as User).ToList().FirstOrDefault(u => u.Username == uname);
+
+
+            //User user = firebaseService.OnceAsync<User>("Users").Result.FirstOrDefault(u => u.Username == uname);
 
             return (user != null);
         }
@@ -45,9 +49,10 @@ namespace TimeManagementController.Services
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient _firebaseClient = new FirebaseClient(_url);
             var mrdka = _firebaseClient.Child("Users").OnceAsync<User>();
-            user = mrdka.Result.Select(e => e.Object as User).ToList()
-                .Where(u => u.Username == uname)
+            user = mrdka.Result.Select(e => e.Object as User).Where(u => u.Username == uname)
                 .FirstOrDefault(u => u.Password == passwd);
+            //user = firebaseService.OnceAsync<User>("Users").Result.Where(u => u.Username == uname)
+            //    .FirstOrDefault(u => u.Password == passwd);
             return (user != null);
         }
     }

@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FirebaseService.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\UserService.cs" />
