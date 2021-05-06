@@ -14,7 +14,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <Label Content="Username"/>
+                <Label Content="Password "/>
                 <TextBox Text="{Binding Password}" Width="60"/>
             </StackPanel>
 
