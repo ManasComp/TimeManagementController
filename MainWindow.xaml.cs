@@ -32,7 +32,6 @@ namespace TimeManagementController
         {
             Trace.WriteLine("login button");
             await viewModel.LoginButton();
-            MessageBox.Show("Done");
         }
 
         private async void Register(object sender, RoutedEventArgs e)

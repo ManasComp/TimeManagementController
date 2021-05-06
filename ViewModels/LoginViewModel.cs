@@ -24,11 +24,13 @@ namespace TimeManagementController.ViewModels
         public string Username { get; set; }
         public string Password { get; set; }
         UserService userService;
+        private readonly PageService _pageService;
         ExcelService xLSX;
 
         public LoginViewModel()
         {
             userService = new UserService();
+            _pageService = new PageService();
         }
         private async Task Register()
         {
@@ -61,9 +63,16 @@ namespace TimeManagementController.ViewModels
 
         public async Task LoginButton()
         {
-            await Login();
-            xLSX = new ExcelService(Id, Url);
-            await xLSX.AddData();
+            if (Login().Result != "")
+            {
+                xLSX = new ExcelService(Id, Url);
+                xLSX.AddData();
+                _pageService.Massage("done");
+            }
+            else
+            {
+                _pageService.Massage("Invalid credentials");
+            }
         }
 
         public async Task RegisterButton()
