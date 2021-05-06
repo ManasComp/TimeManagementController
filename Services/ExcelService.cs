@@ -96,15 +96,9 @@ namespace TimeManagementController.Services
         {
             Trace.WriteLine("AddData");
             Loading();
-
-            //string _url = "https://timemanegment-74160.firebaseio.com/";
-
             await firebaseService.DeleteAsync(Id);
             await firebaseService.PostAsync(Id, activities);
-            //FirebaseClient firebaseClient = new FirebaseClient(_url);
-            //await firebaseClient.Child(Id).DeleteAsync();
-            //await firebaseClient.Child(Id).PostAsync(activities);
-            Trace.WriteLine("**************************************************************************************************End");
+            Trace.WriteLine("*************");
         }
     }
 }

@@ -24,9 +24,6 @@ namespace TimeManagementController.Services
                 Username = uname,
                 Password = passwd
             };
-            //string _url = "https://timemanegment-74160.firebaseio.com/";
-            //FirebaseClient firebaseClient = new FirebaseClient(_url);
-            //await firebaseClient.Child("Users").PostAsync(user);
             await firebaseService.PostAsync("Users", user);
             Trace.WriteLine("ready");
             return true;
@@ -36,11 +33,8 @@ namespace TimeManagementController.Services
         {
             string _url = "https://timemanegment-74160.firebaseio.com/";
             FirebaseClient firebaseClient = new FirebaseClient(_url);
-            User user = firebaseClient.Child("Users").OnceAsync<User>().Result.Select(e => e.Object as User).ToList().FirstOrDefault(u => u.Username == uname);
-
-
-            //User user = firebaseService.OnceAsync<User>("Users").Result.FirstOrDefault(u => u.Username == uname);
-
+            User user = firebaseClient.Child("Users").OnceAsync<User>().Result.Select(e => e.Object as User).ToList()
+                .FirstOrDefault(u => u.Username == uname);
             return (user != null);
         }
 
@@ -51,8 +45,6 @@ namespace TimeManagementController.Services
             var mrdka = _firebaseClient.Child("Users").OnceAsync<User>();
             user = mrdka.Result.Select(e => e.Object as User).Where(u => u.Username == uname)
                 .FirstOrDefault(u => u.Password == passwd);
-            //user = firebaseService.OnceAsync<User>("Users").Result.Where(u => u.Username == uname)
-            //    .FirstOrDefault(u => u.Password == passwd);
             return (user != null);
         }
     }

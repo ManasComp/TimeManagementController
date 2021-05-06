@@ -12,7 +12,6 @@ namespace TimeManagementController.ViewModels
         {
             get => _id;
             set => SetValue(ref _id, value);
-
         }
 
         private string _url;
@@ -84,14 +83,12 @@ namespace TimeManagementController.ViewModels
                 Trace.WriteLine(userService.user.Id);
                 Id = userService.user.Id;
                 return userService.user.Id;
-
             }
             else
             {
                 Trace.WriteLine("error");
                 return "";
             }
-
         }
     }
 }
